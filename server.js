@@ -4,7 +4,7 @@ import cors from 'cors';
 
 const app = express();
 
-
+const PORT = process.env.PORT || 9000;
 app.use(cors());
 app.use(express.json());
 app.get('/input',(req,res) => {
@@ -33,7 +33,7 @@ app.post('/send',(req,res) => {
 })
 
 
-app.listen(9000,() => {console.log('server is working')})
+app.listen(PORT,() => {console.log('server is working')})
 
 
 
