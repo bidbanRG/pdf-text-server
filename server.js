@@ -1,39 +1,34 @@
-import express from 'express';
-// const express = require('express');
-import cors from 'cors';
-
+const  express =  require('express');
+const  cors = require('cors');
+const fileUplaod = require('express-fileupload');
+const pdfParse = require('pdf-parse'); 
 const app = express();
 
 const PORT = process.env.PORT || 9000;
 app.use(cors());
+
+app.use(fileUplaod());
 app.use(express.json());
-app.get('/input',(req,res) => {
-	res.json({
-		name:'Lawra',
-		message:'Khanki'
-	})
+app.get('/',(req,Res) => {
+   Res.send('Hello');
 })
-
-app.post('/send',(req,res) => {
-    const data = req.body.name;
-    console.log(data);
-    const num = data;
-    console.log(num);
-    if(num >= 1 && num <= 100)
-    	{res.json({
-    		message:`You choose correct number. Your number is  ${num} Hurrah :)`,
-    		number:num
-    	})}
-   else{
-   	  res.json({
-    		message:`We need number between 1 - 100 but your number is ${num} sorry :(`,
-    		number:num
-    	})
-   }
+app.post('/post', async (req,res) => {
+   if(req.files === null) res.send('error occucured');
+      const pdf = req.files.PDF;
+      console.log(pdf);
+      const result = await pdfParse(pdf);
+      console.log(result);
+      res.send({'text':result.text});
+      
 })
-
 
 app.listen(PORT,() => {console.log('server is working')})
+/*
+    ***********FORMAT FOR SENDING FILES**************
+   
+   const formData = new FormData();
+   formData.append('json_name', file);
+   const res = await axios.post('http://localhost:9000/post', formData)
 
 
-
+*/              
